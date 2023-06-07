@@ -1,1 +1,1 @@
-# notify-selector-changes
+# selectors-watcher
