@@ -1,17 +1,13 @@
 module.exports = {
-  selectorsType: ["data-qa-id", "id", "class"],
-  watchPaths: ['src/', 'styles/'],
-  ignoredFiles: ['node_modules/', 'dist/'],
-  keyword: 'selector1',
+  selectorsType: ["id"],
   slack: {
-    channel_id: "C01V3TKV67R",
+    channel_id: "",
     token: ""
-
   },
   github: {
     reviewers: [],
-    owner: "Hanan",
-    repo: "repo",
+    owner: "",
+    repo: "",
     octokit_token: ""
   },
   notification_level: "commit"
