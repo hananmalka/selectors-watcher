@@ -7,8 +7,12 @@ const config = loadConfig();
 
 const getSelectorsChanges = async () => {
   console.log("Checking if automation id changed");
+  let greppedValue = ""
+  config.selectorsType.forEach((selector, index) => {
+    greppedValue += selector + "=" + (index === config.selectorsType.length - 1 ? "" : "|");
+  })
   const changedLines = await executeShellCommand(
-      `git diff HEAD --word-diff | grep id= | grep + | awk '{$1=$1};1'`
+      `git diff HEAD --word-diff | grep -E "${greppedValue}" | grep + | awk '{$1=$1};1'`
   );
   return changedLines.split("\n");
 };
@@ -17,8 +21,8 @@ const getOldNewAChangesArray = (gitChanges) => {
   const changesObjectArray = [];
   const flags = "g";
   const selectorNames = config.selectorsType.join("|");
-  const regexOldSelectors = new RegExp('(?:\\-)+(' + selectorNames + ')="[a-z,A-Z,-{}]*', flags);
-  const regexNewSelectors = new RegExp('(?:\\+)+(' + selectorNames + ')="[a-z,A-Z,-{}]*', flags);
+  const regexOldSelectors = new RegExp('(?<![a-zA-Z])(?:\\-)+(' + selectorNames + ')="[a-z,A-Z,-{}]*', flags);
+  const regexNewSelectors = new RegExp('(?<![a-zA-Z])(?:\\+)+(' + selectorNames + ')="[a-z,A-Z,-{}]*', flags);
   for (let i = 0; i < gitChanges.length - 1; i += 1) {
     if (gitChanges[i].match(regexOldSelectors) && gitChanges[i].match(regexNewSelectors)) {
       const changesObject = {
