@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "description": "Notify using slack on selectors changes in the development code",
   "main": "index.js",
+  "keywords": ["selectors", "automation", "flaky", "stability"],
   "files": [
     "utils/**",
     "selectors-watcher.config.js"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
     "selector-guard": "index.js"
