@@ -28,7 +28,7 @@ In `package.json` file, you should define a script that executes selectors-watch
 For example:
 
 ```json
-scripts: {
+"scripts": {
     "watch": node selectors-watcher --config=PATH_TO_CONFIG_FILE 
 }
 ```
@@ -56,18 +56,18 @@ In order to override the values, you need to create a configuration file in your
 
 ```json
 {
-    selectorsType: ["id"],
-    slack: {
-      channel_id: "",
-      token: ""
+    "selectorsType": ["id"],
+    "slack": {
+      "channel_id": "",
+      "token": ""
     },
-    github: {
-      reviewers: [],
-      owner: "",
-      repo: "",
-      octokit_token: ""
+    "github": {
+      "reviewers": [],
+      "owner": "",
+      "repo": "",
+      "octokit_token": ""
     },
-    notification_level: "commit"
+    "notification_level": "commit"
 }
 ```
 
