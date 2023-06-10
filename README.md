@@ -72,7 +72,7 @@ Here is a description of different configuration attributtes:
 - `token` - The access token for using github REST API request. [How to create?](https://docs.github.com/en/rest/overview/authenticating-to-the-rest-api?apiVersion=2022-11-28#authenticating-with-a-personal-access-token)
 
 
-```json
+```jsonc
 {
     //The selectors you want to detect changes (e.g. "test-id", "qa-id" etc')
     "selectorsType": ["id"],
