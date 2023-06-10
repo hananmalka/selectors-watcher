@@ -1,7 +1,4 @@
 
-![Logo](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/th5xamgrr6se0x5ro4g6.png)
-
-
 # selectors-watcher
 
 `selector-watcher` act as a git hook and notify relevant stakeholders with any selectors change
@@ -17,13 +14,14 @@ in order to avoid instability and lack of communication between developers and a
 
 ## Installation & Usage
 
-Install selectors-watcher with npm in you development project
+Install selectors-watcher in your development project
 
 ```bash
   npm install selectors-watcher
 ```
 
-In `package.json` file, you should define a script that executes selectors-watcher.
+In `package.json` file, you should define a script that executes selectors-watcher.  
+In this example it named `watch` but of you can call it whatever you want. 
 
 For example:
 
@@ -33,29 +31,50 @@ For example:
 }
 ```
 
-You can execute it manually (By running `npm run watch`) or you can defined it as a git pre-commit/pre-push hook.
+The script should be defined as a pre-commit/pre-push githook.
 
-For example:
+For example: (Using [husky](https://dev.to/devictoribero/how-to-use-husky-to-create-pre-commit-and-pre-push-hooks-4448) githooks)
 
-![Alt text](https://carbon.now.sh/?bg=rgba%280%2C0%2C0%2C0%29&t=night-owl&wt=none&l=javascript&width=1087&ds=false&dsyoff=20px&dsblur=68px&wc=true&wa=false&pv=56px&ph=56px&ln=false&fl=1&fm=Fira+Code&fs=18px&lh=162%25&si=false&es=1x&wm=false&code=%2522husky%2522%253A%2520%257B%2520%250A%2520%2520%2522hooks%2522%253A%250A%2509%257B%250A%2520%2520%2520%2520%2520%2520%2522pre-commit%2522%253A%2520%2522npm%2520run%2520watch%2522%250A%2520%2520%2520%2520%2520%2520%2509OR%250A%2520%2520%2520%2520%2520%2520%2522pre-push%2522%253A%2520%2522npm%2520run%2520watch%2522%250A%2520%2520%2520%2520%257D%250A%257D)
+```json
+"husky": { 
+  "hooks":
+	{
+      "pre-commit": "npm run watch"
+    }
+}
+```
+
+OR 
+```json
+"husky": { 
+  "hooks":
+	{
+      "pre-push": "npm run watch"
+    }
+}
+```
+
+When developer making changes in one of the selectors defined in the configuration file (See below) and preapring the code for commit/push - `selectors-watcher` detect the changes and notify to the relevant stakeholders (Also included in configuration file)
 ## Configuration file
 
-`selectors-watcher` has a configuration file with defualt values.  
-Still there are attributtes that **MUST** be chaged in order to perform full functionality.  
-In order to override the values, you need to create a configuration file in your
+`selectors-watcher` has a configuration file with defualt values.   
+All attributes can be override but there are attributtes that **MUST** be chaged in order to perform full functionality.  
+In order to override the values, you need to create a configuration file in your develpment project and provide `-c, --config` in your script with the path to it.
 
-- `channel_id` - The Slack channel ID whrer you want to send the notification
+Here is a description of different configuration attributtes:
+ 
+- `channel_id` - The Slack channel ID whre you want to send the notification
 - `token` - Slack token to use for sending messages.  
-  Here is a begginer explantion of [How to quickly get and use a Slack API token.](https://api.slack.com/tutorials/tracks/getting-a-token)
-- reviewers - Array of github users/groups you would like to add as reviewers for the pull request including the selectors changes.
-- owner - github owner.
-- repo - github repo name
-- token - The access token for using github REST API request.  
-  [This is how you can create such token](https://docs.github.com/en/rest/overview/authenticating-to-the-rest-api?apiVersion=2022-11-28#authenticating-with-a-personal-access-token)
+    Here is a begginer explantion of [How to quickly get and use a Slack API token.](https://api.slack.com/tutorials/tracks/getting-a-token)
+- `reviewers` - Array of github users/groups you would like to add as reviewers for the pull request including the selectors changes.
+- `owner` - github owner.
+- `repo` - github repo name
+- `token` - The access token for using github REST API request. [How to create?](https://docs.github.com/en/rest/overview/authenticating-to-the-rest-api?apiVersion=2022-11-28#authenticating-with-a-personal-access-token)
 
 
 ```json
 {
+    //The selectors you want to detect changes (e.g. "test-id", "qa-id" etc')
     "selectorsType": ["id"],
     "slack": {
       "channel_id": "",
@@ -67,14 +86,10 @@ In order to override the values, you need to create a configuration file in your
       "repo": "",
       "octokit_token": ""
     },
-    "notification_level": "commit"
+    /* The notification can be sent before pull reqest created or only after.
+    *  If the notification_level="commit", the notification will be sent before PR opened.
+    *  If the notification_level="pr", the notification will be sent only after PR opened.
+    */
+    "notification_level": "commit"  //"commit" OR "pr"
 }
 ```
-
-## Common used arguments
-This arguments should provided in case of overrding the configuration file
-
-- `-c, --config` - The relative path to the configuration file.
-
-![](assets/husky.png)
-
