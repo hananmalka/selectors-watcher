@@ -11,8 +11,8 @@ in order to avoid instability and lack of communication between developers and a
 ## Features
 
 - Detect code changes according to predefined selectors
-- Notify stakeholders using slack, showing the old and the new versions of changed selectors
-- Add relevant stakeholders as a reviewers in case pull request already exists
+- Notify stakeholders using **Slack**, showing the old and the new versions of changed selectors
+- Add relevant stakeholders as a reviewers in case pull request exists
 
 
 ## Installation & Usage
@@ -23,59 +23,58 @@ Install selectors-watcher with npm in you development project
   npm install selectors-watcher
 ```
 
-Selectors watcher acts as a git hook so the npm command which execute the selectors-watcher should be defined
+In `package.json` file, you should define a script that executes selectors-watcher.
 
+For example:
 
+```json
+scripts: {
+    "watch": node selectors-watcher --config=PATH_TO_CONFIG_FILE 
+}
+```
+
+You can execute it manually (By running `npm run watch`) or you can defined it as a git pre-commit/pre-push hook.
+
+For example:
+
+![Alt text](https://carbon.now.sh/?bg=rgba%280%2C0%2C0%2C0%29&t=night-owl&wt=none&l=javascript&width=1087&ds=false&dsyoff=20px&dsblur=68px&wc=true&wa=false&pv=56px&ph=56px&ln=false&fl=1&fm=Fira+Code&fs=18px&lh=162%25&si=false&es=1x&wm=false&code=%2522husky%2522%253A%2520%257B%2520%250A%2520%2520%2522hooks%2522%253A%250A%2509%257B%250A%2520%2520%2520%2520%2520%2520%2522pre-commit%2522%253A%2520%2522npm%2520run%2520watch%2522%250A%2520%2520%2520%2520%2520%2520%2509OR%250A%2520%2520%2520%2520%2520%2520%2522pre-push%2522%253A%2520%2522npm%2520run%2520watch%2522%250A%2520%2520%2520%2520%257D%250A%257D)
 ## Configuration file
 
-`selectors-watcher` has configuration file with defualt values.  
-Still there are attributtes that **MUST** be chaged in order to perform full functionaly like:
+`selectors-watcher` has a configuration file with defualt values.  
+Still there are attributtes that **MUST** be chaged in order to perform full functionality.  
+In order to override the values, you need to create a configuration file in your
 
-- Adding reviewers to github
+- `channel_id` - The Slack channel ID whrer you want to send the notification
+- `token` - Slack token to use for sending messages.  
+  Here is a begginer explantion of [How to quickly get and use a Slack API token.](https://api.slack.com/tutorials/tracks/getting-a-token)
+- reviewers - Array of github users/groups you would like to add as reviewers for the pull request including the selectors changes.
+- owner - github owner.
+- repo - github repo name
+- token - The access token for using github REST API request.  
+  [This is how you can create such token](https://docs.github.com/en/rest/overview/authenticating-to-the-rest-api?apiVersion=2022-11-28#authenticating-with-a-personal-access-token)
 
 
 ```json
 {
-    "selectorsType": ["id"],
-    "slack": {
-      "channel_id": "",
-      "token": ""
+    selectorsType: ["id"],
+    slack: {
+      channel_id: "",
+      token: ""
     },
-    "github": {
-      "reviewers": [],
-      "owner": "",
-      "repo": "",
-      "octokit_token": ""
+    github: {
+      reviewers: [],
+      owner: "",
+      repo: "",
+      octokit_token: ""
     },
-    "notification_level": "commit"
+    notification_level: "commit"
 }
 ```
 
-Selectors watcher acts as a git hook so the npm command which execute the selectors-watcher should be defined
-
-
-
-## 🚀 About Me
-I'm a full stack developer...
-
-
-## 🔗 Links
-[![portfolio](https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://katherinempeterson.com/)
-[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/)
-[![twitter](https://img.shields.io/badge/twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/)
-
-
-## 🛠 Skills
-Javascript, HTML, CSS...
-
-
 ## Common used arguments
-This arguments are commonly used in tests execution:
+This arguments should provided in case of overrding the configuration file
 
-- `-d, --device-id` - Target device id or name (prefixes allowed)
-- `--plain-name=<substring>` - A plain-text substring of the names of tests to run.
-- `-t, --tags` - Run only tests associated with the specified tags. See: https://pub.dev/packages/test#tagging-tests
-- `-x, --exclude-tags` - Run only tests that do not have the specified tags. See: https://pub.dev/packages/test#tagging-tests
+- `-c, --config` - The relative path to the configuration file.
 
-
+![](assets/husky.png)
 
