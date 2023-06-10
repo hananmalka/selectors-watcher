@@ -10,7 +10,7 @@ const loadConfig = () => {
 const getConfig = () => {
   try {
     // Retrieve the configuration file path from command-line arguments
-    const configFilePath = process.argv.slice(2).find(arg => arg.startsWith('--config='));
+    const configFilePath = process.argv.slice(2).find(arg => arg.startsWith('--config=') || arg.startsWith('-c='));
 
     // Check if the configuration file path is provided
     if (!configFilePath) {
