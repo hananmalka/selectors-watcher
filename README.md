@@ -29,7 +29,7 @@ For example:
 
 ```json
 "scripts": {
-    "watch": node selectors-watcher --config=PATH_TO_CONFIG_FILE 
+    "watch": "node selectors-watcher --config=PATH_TO_CONFIG_FILE" 
 }
 ```
 
