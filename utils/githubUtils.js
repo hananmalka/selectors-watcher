@@ -3,7 +3,7 @@ const { Octokit } = require("@octokit/rest");
 const { loadConfig } = require("./configLoader");
 
 const config = loadConfig();
-const octokit = new Octokit({ auth: `${config.octokit_token}` });
+const octokit = new Octokit({ auth: `${config.github.octokit_token}` });
 
 const getPullRequest = async (branchName) => {
   const githubHeaders = {
