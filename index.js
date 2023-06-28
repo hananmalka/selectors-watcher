@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+
 const { executeShellCommand, sendSlackMessage, getDiffBetweenStrings } = require("./utils/helpers");
 const { getCurrentBranch, getPullRequest, addReviewersToPullRequest } = require("./utils/githubUtils");
 const { loadConfig } = require("./utils/configLoader");
@@ -18,14 +19,13 @@ const getSelectorsChanges = async () => {
 
 const getOldNewAChangesArray = (gitChanges) => {
   const changesObjectArray = [];
-  const flags = "g";
   const selectorNames = config.selectorsType.join("|");
-  const regexOldSelectors = new RegExp('(?<![a-zA-Z])(?:\\-)+(' + selectorNames + ')="[a-z,A-Z,-{}]*', flags);
-  const regexNewSelectors = new RegExp('(?<![a-zA-Z])(?:\\+)+(' + selectorNames + ')="[a-z,A-Z,-{}]*', flags);
+  let match;
+  const regexPattern = new RegExp(`\\[-(.*?${selectorNames}.*?)-\\]\\{\\+(.*?${selectorNames}.*?)\\+\\}`, 'g');
   for (let i = 0; i < gitChanges.length - 1; i += 1) {
-    if (gitChanges[i].match(regexOldSelectors) && gitChanges[i].match(regexNewSelectors)) {
-      const oldValue = gitChanges[i].match(regexOldSelectors).toString();
-      const newValue = gitChanges[i].match(regexNewSelectors).toString();
+    while ((match = regexPattern.exec(gitChanges[i])) !== null) {
+      const oldValue = match[1];
+      const newValue = match[2];
       const difference = getDiffBetweenStrings(oldValue, newValue);
       const changesObject = {
         old: oldValue,
@@ -60,6 +60,8 @@ const getOldNewAChangesArray = (gitChanges) => {
         }
         notificationMessage = await constructNotificationMessage(arrayOfChangedSelectors);
         await sendSlackMessage(notificationMessage);
+      } else {
+        console.log("Selectors format is not supported yet")
       }
     } else {
       console.log("Automation selectors weren't changed");
@@ -72,7 +74,9 @@ const getOldNewAChangesArray = (gitChanges) => {
 })();
 
 const constructNotificationMessage = async(arrayOfChangedSelectors) => {
+  console.log("arrayOfChangedSelectors", arrayOfChangedSelectors)
   const currentBranch = await getCurrentBranch();
+  console.log(currentBranch)
   let selectorsChangesFormatted = "";
   const separator = '\n-----------------------------------------------------------------------------\n'
   for (let i = 0; i < arrayOfChangedSelectors.length; i += 1) {
