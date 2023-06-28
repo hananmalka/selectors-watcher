@@ -17,7 +17,7 @@ in order to avoid instability and lack of communication between developers and a
 Install selectors-watcher in your development project
 
 ```bash
-  npm install selectors-watcher
+  npm install selectors-watcher --save-dev
 ```
 
 In `package.json` file, you should define a script that executes selectors-watcher.  
@@ -27,32 +27,15 @@ For example:
 
 ```json
 "scripts": {
-    "watch": "node selectors-watcher --config=PATH_TO_CONFIG_FILE" 
+    "watch": "npx selectors-watcher --config=PATH_TO_CONFIG_FILE" 
 }
 ```
 
 The script should be defined as a pre-commit/pre-push githook.
+Go to `.git/hooks/pre-commit` and add the command: `npm run <your-script-name>`
 
-For example: (Using [husky](https://dev.to/devictoribero/how-to-use-husky-to-create-pre-commit-and-pre-push-hooks-4448) githooks)
+Also, you can use [husky](https://dev.to/devictoribero/how-to-use-husky-to-create-pre-commit-and-pre-push-hooks-4448) githooks
 
-```json
-"husky": { 
-  "hooks":
-	{
-      "pre-commit": "npm run watch"
-    }
-}
-```
-
-OR 
-```json
-"husky": { 
-  "hooks":
-	{
-      "pre-push": "npm run watch"
-    }
-}
-```
 
 When developer making changes in one of the selectors defined in the configuration file (See below) and preapring the code for commit/push - `selectors-watcher` detect the changes and notify to the relevant stakeholders (Also included in configuration file)
 ## Configuration file
@@ -86,7 +69,7 @@ Here is a description of different configuration attributtes:
       "repo": "",
       "octokit_token": ""
     },
-    /* The notification can be sent before pull reqest created or only after.
+    /* The notification can be sent before pull request created or only after.
     *  If the notification_level="commit", the notification will be sent before PR opened.
     *  If the notification_level="pr", the notification will be sent only after PR opened.
     */

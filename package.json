@@ -1,6 +1,6 @@
 {
   "name": "selectors-watcher",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Notify using slack on selectors changes in the development code",
   "main": "index.js",
   "keywords": [

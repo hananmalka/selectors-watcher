@@ -74,9 +74,7 @@ const getOldNewAChangesArray = (gitChanges) => {
 })();
 
 const constructNotificationMessage = async(arrayOfChangedSelectors) => {
-  console.log("arrayOfChangedSelectors", arrayOfChangedSelectors)
   const currentBranch = await getCurrentBranch();
-  console.log(currentBranch)
   let selectorsChangesFormatted = "";
   const separator = '\n-----------------------------------------------------------------------------\n'
   for (let i = 0; i < arrayOfChangedSelectors.length; i += 1) {
