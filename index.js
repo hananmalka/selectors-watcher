@@ -45,6 +45,7 @@ const getOldNewAChangesArray = (gitChanges) => {
     if (selectorsChanges) {
       const arrayOfChangedSelectors = getOldNewAChangesArray(selectorsChanges);
       if(arrayOfChangedSelectors.length !== 0) {
+        notificationMessage = await constructNotificationMessage(arrayOfChangedSelectors);
         if (config.notification_level === "pr") {
           const currentBranch = await getCurrentBranch();
           const pullRequest = await getPullRequest(currentBranch);
@@ -52,13 +53,11 @@ const getOldNewAChangesArray = (gitChanges) => {
             console.log("Pull request wasn't opened yet. Notification to infra team will be sent when PR is open")
           } else {
             await addReviewersToPullRequest(pullRequest);
-            notificationMessage = await constructNotificationMessage(arrayOfChangedSelectors);
             notificationMessage += notificationMessage +
-                "You were added as a reviewer to the PR: \n" +
+                `<@U048V203HMM> were added as a reviewer to the PR: \n` +
                 `https://github.com/${config.github.owner}/${config.github.repo}/pull/${pullRequest[0].number}`
           }
         }
-        notificationMessage = await constructNotificationMessage(arrayOfChangedSelectors);
         await sendSlackMessage(notificationMessage);
       } else {
         console.log("Selectors format is not supported yet")
